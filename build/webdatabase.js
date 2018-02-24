@@ -59,10 +59,10 @@ IndexedDb.prototype.add=function (storeName,data,callback) {
         }
     }
     transaction.onerror=function (e) {
-        if(void 0 === callback || void 0 === callback.onerror){
+        if(void 0 === callback || void 0 === callback.error){
             console.log("on error ",e.target.error);
         }else{
-            callback.onerror(e);
+            callback.error(e);
         }
     }
 }
@@ -87,10 +87,10 @@ IndexedDb.prototype.delete=function (storeName,keyPath,callback) {
         }
     }
     transaction.onerror=function (e) {
-        if(void 0 === callback || void 0 === callback.onerror){
+        if(void 0 === callback || void 0 === callback.error){
             console.log("on error ",e.target.error);
         }else{
-            callback.onerror(e);
+            callback.error(e);
         }
     }
 }
@@ -114,10 +114,10 @@ IndexedDb.prototype.get=function (storeName,keyPath,callback) {
         }
     }
     transaction.onerror=function (e) {
-        if(void 0 === callback || void 0 === callback.onerror){
+        if(void 0 === callback || void 0 === callback.error){
             console.log("on error ",e);
         }else{
-            callback.onerror(e);
+            callback.error(e);
         }
     }
 }
@@ -142,10 +142,10 @@ IndexedDb.prototype.set=function (storeName,keyPath,key,value,callback) {
         }
     }
     transaction.onerror = function (e) {
-        if(void 0 === callback || void 0 === callback.onerror){
+        if(void 0 === callback || void 0 === callback.error){
             console.log("on error ",e.target.error);
         }else{
-            callback.onerror(e);
+            callback.error(e);
         }
 
     }

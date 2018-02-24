@@ -14,6 +14,7 @@
 <input type="button" id="addKey" value="addKey">
 <input type="button" id="addStudentInfo" value="addStudentInfo">
 <input type="button" id="getStudentInfo" value="getStudentInfo">
+<input type="button" id="createTable" value="createTable">
 <script type="text/javascript">
     window.onload=function () {
         var keyPath=document.getElementById("keyPath");
@@ -38,16 +39,21 @@
 
             },
             connSuccess:function (db) {
-
-                /*dbs.get("customer",'ssn',function (v) {
-                    console.log("value=",v);
-                })*/
             }
         })
         document.getElementById("initData").addEventListener("click",function (e) {
             for(var d in customerData){
                 dbs.add(stores,customerData[d]);
             }
+        })
+        document.getElementById("createTable").addEventListener("click",function (e) {
+            dbs=new IndexedDb('test1',{
+                connUpgrade: function (self) {
+                    self.createTable("teacher",'ids');
+                },
+                connSuccess:function (db) {
+                }
+            },2)
         })
         document.getElementById("addStudentInfo").addEventListener("click",function (e) {
             dbs.add(stores1,{
