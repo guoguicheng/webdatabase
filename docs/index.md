@@ -21,9 +21,9 @@ IndexedDb操作类
     //创建表结构函数
     createTable(tableName,keyPath,callback)
     /**
-    *tableName 表名称
-    *keyPath 数据表索引列名称
-    *callback:{
+    *param:tableName 表名称
+    *param:keyPath 数据表索引列名称
+    *param:callback:{
     *   success:function(){} //执行成功回调
     *}
     **/
@@ -53,36 +53,63 @@ IndexedDb操作类
     })
     
 ### 添加表数据
-函数原型 add("tableName",data,callback)  
+函数原型 add(tableName,data,callback)  
+
+    /**
+    *param:tableName 要操作的表名称
+    *param:data 要添加的数据，结构需与创建表结构createTable时定义的相同
+    *param:callback：{ 添加完成回调
+    *   success:function () {}
+    *   complete:function(e){},
+    *   error:function(e){}
+    *}
+    **/
 
     dbs.add("TableName1",{
-        'KeyPathName1':'1111',
+        'KeyPath1':'1111',
         'name':'ggc',
         'email','abc@qq.com'
     },{
-        success:function (result) {
-            console.log(result);
-        },
+        success:function () {},
         complete:function(e){},
         error:function(e){}
     })
     
 ### 获取表数据  
-函数原型:get("tableName","keyPathVal",callback)  
+函数原型:get(tableName,keyPathVal,callback)  
 
+    /**
+    *param:tableName 要操作的表名称
+    *param:keyPathVal 索引列的值
+    *callback:{
+    *   success:function (result) {
+    *       console.log(result);
+    *   },
+    *   complete:function(e){},
+    *   error:function(e){}
+    *}
+    **/
     //注意该方法已readonly方式打开，需要更新数据请使用set方法
     dbs.get("TableName1","keyPath1_Value",{
         success:function (result) {
             console.log(result);
         },
-        complete:function(e){
-        },
+        complete:function(e){},
         error:function(e){}
     })  
     
 ### 删除一条数据
 函数原型：delete(tableName,keyPathVal,callback)
 
+    /**
+    *param:tableName 要操作的表名称
+    *param:keyPathVal 索引列的值
+    *callback:{
+    *   success:function () {},
+    *   complete:function(e){},
+    *   error:function(e){}
+    *}
+    **/
     dbs.delete("TableName1","keyPathVal",{
         success:function () {},
         complete:function(e){},
@@ -90,8 +117,20 @@ IndexedDb操作类
     })
     
 ### 更新数据
-函数原型：set(storeName,keyPath,key,value,callback)
+函数原型：set(tableName,keyPathVal,key,value,callback)
 
+    /**
+    *param:tableName 要操作的表名称
+    *param:keyPathVal 索引列的值
+    *param:key 需要更新的key
+    *param:value 需要更新的key的值
+    *callback:{
+    *   success:function () {},
+    *   complete:function(e){},
+    *   error:function(e){}
+    *}
+    **/
+    
     //相当于mysql 语句 update TableName1 set updateKey=updateValue where keyPath=keyPathVal
     dbs.set("TableName1",keyPathVal,'updateKey',updateValue,{
         success:function () {},
