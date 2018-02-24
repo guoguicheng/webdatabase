@@ -41,10 +41,11 @@ IndexedDb操作类
                     objectStore.createIndex('email','email',{unique:true});
                 }
             })
-            self.createTable(TableName2",'keyPath2')
+            //创建另一张表TableName2
+            self.createTable(TableName2,'keyPath2')
 
         },
-        connSuccess:function (db) {     //连接成功回掉数据库连接实例
+        connSuccess:function (self) {     //连接成功回掉数据库操作类实例
             
         },
         connError:function(e){ //如果连接失败
