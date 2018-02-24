@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../build/webdatabase.js"></script>
+</head>
+<body>
+<input id="keyPath" value="333-33-3333">
+<input type="button" id="initData" value="initData">
+<input type="button" id="getKey" value="getKey">
+<input type="button" id="setKey" value="setKey">
+<input type="button" id="deleteKey" value="deleteKey">
+<input type="button" id="addKey" value="addKey">
+<input type="button" id="addStudentInfo" value="addStudentInfo">
+<input type="button" id="getStudentInfo" value="getStudentInfo">
+<script type="text/javascript">
+    window.onload=function () {
+        var keyPath=document.getElementById("keyPath");
+        const customerData = [
+            {ssn: '444-44-4444', name: "Bill", age: 35, email: 'bill@qq.com'},
+            {ssn: '333-33-3333', name: "Donna", age: 32, email: 'donna@qq.com'}
+        ];
+        var stores="customers",stores1="student";
+        var dbs=new IndexedDb('test1',{
+            connUpgrade: function (self) {
+                self.createTable(stores,'ssn',{
+                    success:function (objectStore) {
+                        // 创建一个索引来通过 name 搜索客户。
+                        // 可能会有重复的，因此我们不能使用 unique 索引。
+                        objectStore.createIndex('name','name',{unique:false});
+                        // 创建一个索引来通过 email 搜索客户。
+                        // 我们希望确保不会有两个客户使用相同的 email 地址，因此我们使用一个 unique 索引。
+                        objectStore.createIndex('email','email',{unique:true});
+                    }
+                })
+                self.createTable(stores1,'id')
+
+            },
+            connSuccess:function (db) {
+
+                /*dbs.get("customer",'ssn',function (v) {
+                    console.log("value=",v);
+                })*/
+            }
+        })
+        document.getElementById("initData").addEventListener("click",function (e) {
+            for(var d in customerData){
+                dbs.add(stores,customerData[d]);
+            }
+        })
+        document.getElementById("addStudentInfo").addEventListener("click",function (e) {
+            dbs.add(stores1,{
+                'id':111,
+                'name':'ggc'
+            })
+        })
+        document.getElementById("getStudentInfo").addEventListener("click",function (e) {
+            dbs.get(stores1,111,{
+                success:function (result) {
+                    console.log(result);
+                }
+            })
+        })
+        document.getElementById("getKey").addEventListener("click",function (e) {
+
+            dbs.get(stores,keyPath.value,{
+                success:function (obj) {
+                    console.log(obj);
+                }
+            })
+        })
+        document.getElementById("setKey").addEventListener("click",function (e) {
+            dbs.set(stores,keyPath.value,'age',22)
+        })
+        document.getElementById("deleteKey").addEventListener("click",function (e) {
+            dbs.delete(stores,keyPath.value)
+        })
+        document.getElementById("addKey").addEventListener("click",function (e) {
+            var data={ssn: '222-22-2222', name: "Donna1", age: 32, email: '2244@qq.com'};
+            dbs.add(stores,data)
+        })
+
+
+    }
+</script>
+</body>
+</html>
