@@ -5,11 +5,11 @@ IndexedDb操作类
     /**
     *param:dbName 数据库名称
     *param:connCallback:{
-    *   connSuccess:function(self){
-    *        //连接成功回调self当前类实例
+    *   connSuccess:function(self,e){
+    *        //连接成功回调self当前类实例和事件
     *   },
-    *   connUpgrade:function(self){
-    *       //连接成功回调self当前类实例
+    *   connUpgrade:function(self,e){
+    *       //连接成功回调self当前类实例和事件
     *   },
     *   connError:function(e){
     *       //连接失败返回错误信息

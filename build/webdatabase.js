@@ -23,12 +23,12 @@ var IndexedDb=function (dbname,connCallback,connectionVersion) {
     this.connection.onupgradeneeded = function (e) {
         console.log("Upgrading");
         that.db = e.target.result;
-        connCallback.connUpgrade(that);
+        connCallback.connUpgrade(that,e);
     }
     this.connection.onsuccess = function (e) {
         console.log("open indexed db success");
         that.db = e.target.result;
-        connCallback.connSuccess(that);
+        connCallback.connSuccess(that,e);
     }
 }
 IndexedDb.prototype.createTable=function (tableName,keyPath,callback) {

@@ -24,7 +24,7 @@
         ];
         var stores="customers",stores1="student";
         var dbs=new IndexedDb('test1',{
-            connUpgrade: function (self) {
+            connUpgrade: function (self,e) {
                 self.createTable(stores,'ssn',{
                     success:function (objectStore) {
                         // 创建一个索引来通过 name 搜索客户。
@@ -35,10 +35,18 @@
                         objectStore.createIndex('email','email',{unique:true});
                     }
                 })
-                self.createTable(stores1,'id')
+                self.createTable(stores1,'id');
+
+                //添加默认数据
+                var transaction=e.target.transaction;
+                transaction.oncomplete=function (e1) {
+                    self.add(stores,customerData[0]);
+                }
 
             },
-            connSuccess:function (db) {
+            connSuccess:function (self,e) {},
+            connError:function (e) {
+
             }
         })
         document.getElementById("initData").addEventListener("click",function (e) {
