@@ -12,37 +12,37 @@ var IndexedDb=function (dbname,connCallback,connectionVersion) {
     // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
     this.databaseName=dbname;
     if (!window.indexedDB) {
-        console.log("Your browser dons't support IndexedDB");
+        console.info("Your browser dons't support IndexedDB");
         return;
     }
     this.connection = window.indexedDB.open(dbname, connectionVersion);
     this.connection.onerror = function (e) {
         if(void 0 === connCallback.abort) {
-            console.log("open database error,", e);
+            console.error(e.target.error);
         }else{
             connCallback.connError(e);
         }
     }
     this.connection.onupgradeneeded = function (e) {
-        console.log("Upgrading");
+        console.info("Upgrading");
         that.db = e.target.result;
         connCallback.connUpgrade(that,e);
     }
     this.connection.onsuccess = function (e) {
-        console.log("open indexed db success");
+        console.info("open indexed db success");
         that.db = e.target.result;
         connCallback.connSuccess(that,e);
     }
     this.connection.onabort=function (e) {
         if(void 0 === connCallback.abort) {
-            console.log("open database abort")
+            console.info("open database abort")
         }else{
             connCallback.connAbort(e);
         }
     }
     this.connection.onversionchange=function (e) {
         if(void 0 === connCallback.connVersionChange) {
-            console.log("database version changed")
+            console.info("database version changed")
         }else{
             connCallback.connVersionChange(e);
         }
@@ -51,7 +51,7 @@ var IndexedDb=function (dbname,connCallback,connectionVersion) {
 IndexedDb.prototype.createTable=function (tableName,keyPath,callback) {
     var objectStore = this.db.createObjectStore(tableName, {keyPath: keyPath});
     if(void 0 === callback || void 0 === callback.success){
-        console.log("create success");
+        console.info("create success");
     }else{
         callback.success(objectStore);
     }
@@ -65,7 +65,7 @@ IndexedDb.prototype.add=function (storeName,data,callback) {
     var request=objectStore.add(data);
     request.onsuccess=function (e) {
         if(void 0 === callback || void 0 === callback.success){
-            console.log("add success")
+            console.info("add success")
         }else{
             callback.success(e);
         }
@@ -73,14 +73,14 @@ IndexedDb.prototype.add=function (storeName,data,callback) {
     }
     transaction.oncomplete=function (e) {
         if(void 0 === callback || void 0 === callback.complete){
-            console.log("add complete");
+            console.info("add complete");
         }else{
             callback.complete(e);
         }
     }
     transaction.onerror=function (e) {
         if(void 0 === callback || void 0 === callback.error){
-            console.log("on error ",e.target.error);
+            console.error(e.target.error);
         }else{
             callback.error(e);
         }
@@ -93,7 +93,7 @@ IndexedDb.prototype.delete=function (storeName,keyPath,callback) {
     var request=objectStore.delete(keyPath);
     request.onsuccess=function (e) {
         if(void 0 === callback || void 0 === callback.success){
-            console.log("delete success")
+            console.info("delete success")
         }else{
             callback.success();
         }
@@ -101,14 +101,14 @@ IndexedDb.prototype.delete=function (storeName,keyPath,callback) {
     }
     transaction.oncomplete=function (e) {
         if(void 0 === callback || void 0 === callback.complete){
-            console.log("delete complete");
+            console.info("delete complete");
         }else{
             callback.complete(e);
         }
     }
     transaction.onerror=function (e) {
         if(void 0 === callback || void 0 === callback.error){
-            console.log("on error ",e.target.error);
+            console.error(e.target.error);
         }else{
             callback.error(e);
         }
@@ -120,7 +120,7 @@ IndexedDb.prototype.get=function (storeName,keyPath,callback) {
     var request=objectStore.get(keyPath);
     request.onsuccess=function (e) {
         if(void 0 === callback || void 0 === callback.success){
-            console.log("on error ",e.target.error);
+            console.error(e.target.error);
         }else{
             callback.success(request.result);
         }
@@ -128,14 +128,14 @@ IndexedDb.prototype.get=function (storeName,keyPath,callback) {
     }
     transaction.oncomplete=function (e) {
         if(void 0 === callback || void 0 === callback.complete){
-            console.log("get complete");
+            console.info("get complete");
         }else{
             callback.complete(e);
         }
     }
     transaction.onerror=function (e) {
         if(void 0 === callback || void 0 === callback.error){
-            console.log("on error ",e);
+            console.error(e.target.error);
         }else{
             callback.error(e);
         }
@@ -149,21 +149,21 @@ IndexedDb.prototype.set=function (storeName,keyPath,key,value,callback) {
         request.result[key] = value;
         objectStore.put(request.result);
         if (void 0 === callback || void 0 === callback.success) {
-            console.log("put success");
+            console.info("put success");
         } else {
             callback.success();
         }
     }
     transaction.oncomplete = function (e) {
         if (void 0 === callback || void 0 === callback.complete) {
-            console.log("set complete");
+            console.info("set complete");
         } else {
             callback.complete(e);
         }
     }
     transaction.onerror = function (e) {
         if(void 0 === callback || void 0 === callback.error){
-            console.log("on error ",e.target.error);
+            console.error(e.target.error);
         }else{
             callback.error(e);
         }

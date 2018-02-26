@@ -52,8 +52,14 @@
             connSuccess:function (self,e) {},
             connError:function (e) {
 
+            },
+            connVersionChange:function (e) {
+                console.log("version change")
+            },
+            connAbort:function (e) {
+                console.log("conn abort");
             }
-        },3)
+        },1)
         document.getElementById("close").addEventListener("click",function (e) {
             dbs.close();
         })
@@ -69,8 +75,10 @@
             }
         })
         document.getElementById("createTable").addEventListener("click",function (e) {
+            dbs.close();
             dbs=new IndexedDb('test1',{
                 connUpgrade: function (self,e) {
+                    alert('sssssss1')
                     self.createTable("teacher",'ids');
                 },
                 connSuccess:function (db) {
@@ -78,6 +86,7 @@
             },2)
         })
         document.getElementById("deleteTable").addEventListener("click",function (e) {
+            dbs.close();
             dbs=new IndexedDb('test1',{
                 connUpgrade:function (self,e) {
                     self.deleteTable('teacher');
@@ -85,7 +94,7 @@
                 connSuccess:function (self,e) {
                     
                 }
-            },3)
+            },2)
 
         })
         document.getElementById("addStudentInfo").addEventListener("click",function (e) {
