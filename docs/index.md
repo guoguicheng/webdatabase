@@ -13,9 +13,7 @@ IndexedDb操作类
     *   },
     *   connError:function(e){
     *       //连接失败返回错误信息
-    *   },
-    *   connAbort:function(e){},//终止是触发
-    *   connVersionChange:function(e){}//版本更新时触发
+    *   }
     *}
     *param:databaseVersion 数据库版本
     **/

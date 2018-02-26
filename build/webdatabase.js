@@ -33,20 +33,6 @@ var IndexedDb=function (dbname,connCallback,connectionVersion) {
         that.db = e.target.result;
         connCallback.connSuccess(that,e);
     }
-    this.connection.onabort=function (e) {
-        if(void 0 === connCallback.abort) {
-            console.info("open database abort")
-        }else{
-            connCallback.connAbort(e);
-        }
-    }
-    this.connection.onversionchange=function (e) {
-        if(void 0 === connCallback.connVersionChange) {
-            console.info("database version changed")
-        }else{
-            connCallback.connVersionChange(e);
-        }
-    }
 }
 IndexedDb.prototype.createTable=function (tableName,keyPath,callback) {
     var objectStore = this.db.createObjectStore(tableName, {keyPath: keyPath});
