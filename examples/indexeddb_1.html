@@ -15,6 +15,10 @@
 <input type="button" id="addStudentInfo" value="addStudentInfo">
 <input type="button" id="getStudentInfo" value="getStudentInfo">
 <input type="button" id="createTable" value="createTable">
+<input type="button" id="deleteTable" value="deleteTable">
+<input type="button" id="close" value="close">
+<input type="button" id="getVersion" value="getVersion">
+<input type="button" id="deleteDatabase" value="deleteDatabase">
 <script type="text/javascript">
     window.onload=function () {
         var keyPath=document.getElementById("keyPath");
@@ -49,6 +53,15 @@
             connError:function (e) {
 
             }
+        },3)
+        document.getElementById("close").addEventListener("click",function (e) {
+            dbs.close();
+        })
+        document.getElementById("deleteDatabase").addEventListener("click",function (e) {
+            dbs.deleteDatabase('test1');
+        })
+        document.getElementById("getVersion").addEventListener("click",function (e) {
+            alert("数据库版本："+dbs.db.version);
         })
         document.getElementById("initData").addEventListener("click",function (e) {
             for(var d in customerData){
@@ -57,12 +70,23 @@
         })
         document.getElementById("createTable").addEventListener("click",function (e) {
             dbs=new IndexedDb('test1',{
-                connUpgrade: function (self) {
+                connUpgrade: function (self,e) {
                     self.createTable("teacher",'ids');
                 },
                 connSuccess:function (db) {
                 }
             },2)
+        })
+        document.getElementById("deleteTable").addEventListener("click",function (e) {
+            dbs=new IndexedDb('test1',{
+                connUpgrade:function (self,e) {
+                    self.deleteTable('teacher');
+                },
+                connSuccess:function (self,e) {
+                    
+                }
+            },3)
+
         })
         document.getElementById("addStudentInfo").addEventListener("click",function (e) {
             dbs.add(stores1,{

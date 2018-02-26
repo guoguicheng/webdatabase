@@ -13,19 +13,11 @@ IndexedDb操作类
     *   },
     *   connError:function(e){
     *       //连接失败返回错误信息
-    *   }
+    *   },
+    *   connAbort:function(e){},//终止是触发
+    *   connVersionChange:function(e){}//版本更新时触发
     *}
     *param:databaseVersion 数据库版本
-    **/
-    
-    //创建表结构函数
-    createTable(tableName,keyPath,callback)
-    /**
-    *param:tableName 表名称
-    *param:keyPath 数据表索引列名称
-    *param:callback:{
-    *   success:function(){} //执行成功回调
-    *}
     **/
     
     ######例如######
@@ -53,6 +45,24 @@ IndexedDb操作类
         }
     })
     
+### 创建表结构函数（必须触发connUpgrade，并只可在函数内调用）
+函数原型:createTable(tableName,keyPath,callback)  
+
+    /**
+    *param:tableName 表名称
+    *param:keyPath 数据表索引列名称
+    *param:callback:{
+    *   success:function(){} //执行成功回调
+    *}
+    **/
+    
+### 删除表结构函数（必须触发connUpgrade，并只可在函数内调用）
+函数原型:deleteTable(tableName)  
+
+    /**
+    *param:tableName 表名称
+    **/
+
 ### 添加表数据
 函数原型 add(tableName,data,callback)  
 
@@ -137,4 +147,21 @@ IndexedDb操作类
         success:function () {},
         complete:function(e){},
         error:function(e){}
-    })
+    })  
+    
+### 关闭数据库连接
+函数原型:close()  
+
+    /**
+    *无参数
+    **/
+    
+### 删除数据库
+函数原型:deleteDatabase(dbName)
+
+    /**
+    *param:dbName 当前打开数据库的数据库名称
+    **/
+    
+### 其他高级操作
+数据库实例成功后通过 dbs.connection 可获取当前数据库连接对象，可执行更高级的操作

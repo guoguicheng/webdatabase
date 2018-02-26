@@ -1,5 +1,4 @@
-//https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Using_IndexedDB
-//https://www.cnblogs.com/smileberry/p/3844269.html
+//https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase/onversionchange
 
 var IndexedDb=function (dbname,connCallback,connectionVersion) {
     var that = this;
@@ -11,14 +10,18 @@ var IndexedDb=function (dbname,connCallback,connectionVersion) {
     window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
     window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
     // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
+    this.databaseName=dbname;
     if (!window.indexedDB) {
         console.log("Your browser dons't support IndexedDB");
         return;
     }
     this.connection = window.indexedDB.open(dbname, connectionVersion);
     this.connection.onerror = function (e) {
-        console.log("open database error,", e);
-        connCallback.connError(e);
+        if(void 0 === connCallback.abort) {
+            console.log("open database error,", e);
+        }else{
+            connCallback.connError(e);
+        }
     }
     this.connection.onupgradeneeded = function (e) {
         console.log("Upgrading");
@@ -30,6 +33,20 @@ var IndexedDb=function (dbname,connCallback,connectionVersion) {
         that.db = e.target.result;
         connCallback.connSuccess(that,e);
     }
+    this.connection.onabort=function (e) {
+        if(void 0 === connCallback.abort) {
+            console.log("open database abort")
+        }else{
+            connCallback.connAbort(e);
+        }
+    }
+    this.connection.onversionchange=function (e) {
+        if(void 0 === connCallback.connVersionChange) {
+            console.log("database version changed")
+        }else{
+            connCallback.connVersionChange(e);
+        }
+    }
 }
 IndexedDb.prototype.createTable=function (tableName,keyPath,callback) {
     var objectStore = this.db.createObjectStore(tableName, {keyPath: keyPath});
@@ -38,6 +55,9 @@ IndexedDb.prototype.createTable=function (tableName,keyPath,callback) {
     }else{
         callback.success(objectStore);
     }
+}
+IndexedDb.prototype.deleteTable=function (tableName) {
+    this.db.deleteObjectStore(tableName);
 }
 IndexedDb.prototype.add=function (storeName,data,callback) {
     var transaction=this.db.transaction([storeName],"readwrite");
@@ -148,5 +168,16 @@ IndexedDb.prototype.set=function (storeName,keyPath,key,value,callback) {
             callback.error(e);
         }
 
+    }
+}
+IndexedDb.prototype.close=function () {
+    this.db.close();
+}
+IndexedDb.prototype.deleteDatabase=function (DbName) {
+    this.close();
+    if(DbName==this.databaseName) {
+        window.indexedDB.deleteDatabase(DbName);
+    }else{
+        console.error("database name don't match,delete fail")
     }
 }
