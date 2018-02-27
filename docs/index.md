@@ -163,3 +163,27 @@ IndexedDb操作类
     
 ### 其他高级操作
 数据库实例成功后通过 dbs.connection 可获取当前数据库连接对象，可执行更高级的操作
+
+
+## Cookie操作类
+设置值：set(name,value)
+
+    Cookie.set(name,value)
+    /**
+    *param:name cookie 键名
+    *param:value 值
+    **/
+    
+获取值：get(name)
+    
+    Cookie.get(name)
+    /**
+    *param:name 键名
+    **/
+    
+删除值:delete(name)
+    
+    Cookie.delete(name)
+    /**
+    *param:name 键名
+    **/
