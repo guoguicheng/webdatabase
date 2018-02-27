@@ -19,6 +19,9 @@
 <input type="button" id="close" value="close">
 <input type="button" id="getVersion" value="getVersion">
 <input type="button" id="deleteDatabase" value="deleteDatabase">
+<input type="button" id="setCookie" value="setCookie">
+<input type="button" id="getCookie" value="getCookie">
+<input type="button" id="deleteCookie" value="deleteCookie">
 <script type="text/javascript">
     window.onload=function () {
         var keyPath=document.getElementById("keyPath");
@@ -54,6 +57,16 @@
 
             }
         },1)
+        var cookie=new Cookie();
+        document.getElementById("setCookie").addEventListener("click",function (e) {
+            cookie.set('name','guoguicheng');
+        })
+        document.getElementById("getCookie").addEventListener("click",function (e) {
+            alert(cookie.get('name'));
+        })
+        document.getElementById("deleteCookie").addEventListener("click",function (e) {
+            cookie.delete("name");
+        })
         document.getElementById("close").addEventListener("click",function (e) {
             dbs.close();
         })

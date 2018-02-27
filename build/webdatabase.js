@@ -167,3 +167,23 @@ IndexedDb.prototype.deleteDatabase=function (DbName) {
         console.error("database name don't match,delete fail")
     }
 }
+var Cookie= function(){}
+Cookie.prototype.get=function (name) {
+    var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+
+    if (arr != null)
+        return unescape(arr[2]);
+
+    return null;
+}
+
+Cookie.prototype.set=function (name, val) {
+    var days = 30;
+    var date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = name + "=" + escape(val) + ";expires=" + date.toGMTString();
+}
+
+Cookie.prototype.delete=function (name) {
+    document.cookie = name + "=;expires=-1";
+}
